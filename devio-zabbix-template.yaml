@@ -1,6 +1,6 @@
 zabbix_export:
   version: '5.4'
-  date: '2022-02-28T18:16:46Z'
+  date: '2022-02-28T19:08:14Z'
   groups:
     -
       uuid: 56cd7804ef7348ed99e9e136b4f6c4ed
@@ -8,8 +8,8 @@ zabbix_export:
   templates:
     -
       uuid: 2e4d62e030e241f287b072a124c392ee
-      template: Devio
-      name: Devio
+      template: 'Devio SNMPv2'
+      name: 'Devio SNMPv2'
       templates:
         -
           name: 'Template Module ICMP Ping'
@@ -83,7 +83,7 @@ zabbix_export:
           triggers:
             -
               uuid: fb28539e22df46e8aabf30ba24744cb2
-              expression: 'last(/Devio/system.hw.firmware,#1)<> last(/Devio/system.hw.firmware,#2)=1 and length(last(/Devio/system.hw.firmware))>0'
+              expression: 'last(/Devio SNMPv2/system.hw.firmware,#1)<> last(/Devio SNMPv2/system.hw.firmware,#2)=1 and length(last(/Devio SNMPv2/system.hw.firmware))>0'
               name: 'Firmware has changed'
               opdata: 'Current value: {ITEM.LASTVALUE1}'
               priority: INFO
@@ -251,7 +251,7 @@ zabbix_export:
           triggers:
             -
               uuid: 076f25ae975240f6be5b646bebec0847
-              expression: last(/Devio/system.hw.mic_error)=1
+              expression: 'last(/Devio SNMPv2/system.hw.mic_error)=1'
               name: 'Microphone line fault'
               priority: AVERAGE
         -
@@ -548,5 +548,5 @@ zabbix_export:
           sortorder: '1'
           color: 1A7C11
           item:
-            host: Devio
+            host: 'Devio SNMPv2'
             key: system.hw.call.inprogress
