@@ -1,0 +1,552 @@
+zabbix_export:
+  version: '5.4'
+  date: '2022-02-28T18:16:46Z'
+  groups:
+    -
+      uuid: 56cd7804ef7348ed99e9e136b4f6c4ed
+      name: Conference
+  templates:
+    -
+      uuid: 2e4d62e030e241f287b072a124c392ee
+      template: Devio
+      name: Devio
+      templates:
+        -
+          name: 'Template Module ICMP Ping'
+      groups:
+        -
+          name: Conference
+      items:
+        -
+          uuid: 096d779f04f0429691712a7460b86791
+          name: 'Hands Free Version'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.1.10.0
+          key: system.handsfree.version
+          delay: 1h
+          history: 180d
+          trends: '0'
+          value_type: TEXT
+          inventory_link: SOFTWARE_APP_A
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: f924542dce844117b035205974ab41b4
+          name: 'Call in Progress'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.3.8.0
+          key: system.hw.call.inprogress
+          delay: 5m
+          history: 180d
+          description: |
+            Call in progress
+            
+            1 - true,
+            0(2) - false
+          preprocessing:
+            -
+              type: STR_REPLACE
+              parameters:
+                - '2'
+                - '0'
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 518437bdf9ce489e9c069d1da46d898d
+          name: 'Firmware version'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.1.2.0
+          key: system.hw.firmware
+          delay: 1h
+          history: 180d
+          trends: '0'
+          value_type: TEXT
+          inventory_link: SOFTWARE
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: Inventory
+          triggers:
+            -
+              uuid: fb28539e22df46e8aabf30ba24744cb2
+              expression: 'last(/Devio/system.hw.firmware,#1)<> last(/Devio/system.hw.firmware,#2)=1 and length(last(/Devio/system.hw.firmware))>0'
+              name: 'Firmware has changed'
+              opdata: 'Current value: {ITEM.LASTVALUE1}'
+              priority: INFO
+              description: 'Firmware version has changed. Ack to close'
+        -
+          uuid: 16ecd37891114f418638f91334ffb84b
+          name: 'SNMP version'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.1.3.0
+          key: system.hw.firmware_snmp
+          delay: 1h
+          history: 180d
+          trends: '0'
+          value_type: TEXT
+          inventory_link: SOFTWARE_APP_B
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: eb1d2e90a957489abdb3677991be3506
+          name: 'Gain on input (headset)'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.3.3.0
+          key: system.hw.gain.headset
+          delay: 1h
+          history: 180d
+          value_type: FLOAT
+          units: dB
+          description: 'Headset input gain (dB)'
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: a74e6b671f324e0c816d20740e567eab
+          name: 'Gain on input (soft)'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.3.2.0
+          key: system.hw.gain.input
+          delay: 1h
+          history: 180d
+          value_type: FLOAT
+          units: dB
+          description: 'Soft codec input gain (dB)'
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 8be0cb3126c04a3692235d41dfafe928
+          name: 'MAC address'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.1.9.0
+          key: system.hw.mac
+          delay: 1h
+          history: 180d
+          trends: '0'
+          value_type: TEXT
+          inventory_link: MACADDRESS_A
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: 72ce72607c224f418b14024028e156fc
+          name: 'Microphone Type'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.2.1.0
+          key: system.hw.mic
+          delay: 1h
+          history: 180d
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+            -
+              type: STR_REPLACE
+              parameters:
+                - '0'
+                - unknown
+            -
+              type: STR_REPLACE
+              parameters:
+                - '1'
+                - DTM-1
+            -
+              type: STR_REPLACE
+              parameters:
+                - '2'
+                - DCM-1
+            -
+              type: STR_REPLACE
+              parameters:
+                - '3'
+                - TTM-XEX
+            -
+              type: STR_REPLACE
+              parameters:
+                - '4'
+                - TCM-XEX
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 1b5ed60126a94f589d68d9a835a1144d
+          name: 'Microphones Number'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.2.1.0
+          key: system.hw.micnum
+          delay: 1h
+          history: 180d
+          description: 'Number of microphones expected'
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 118fbc362ed04b0bbead86d531213aaa
+          name: 'Microphone line fault'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.2.2.0
+          key: system.hw.mic_error
+          delay: 10m
+          history: 180d
+          preprocessing:
+            -
+              type: STR_REPLACE
+              parameters:
+                - '2'
+                - '0'
+          tags:
+            -
+              tag: Application
+              value: General
+          triggers:
+            -
+              uuid: 076f25ae975240f6be5b646bebec0847
+              expression: last(/Devio/system.hw.mic_error)=1
+              name: 'Microphone line fault'
+              priority: AVERAGE
+        -
+          uuid: b6f2fac07d044c38a2e78eac2209ad72
+          name: 'Microphone LED mode'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.2.4.0
+          key: system.hw.mic_ledmode
+          delay: 1h
+          history: 180d
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+            -
+              type: STR_REPLACE
+              parameters:
+                - '0'
+                - alwaysOn
+            -
+              type: STR_REPLACE
+              parameters:
+                - '1'
+                - onWhenConnected
+            -
+              type: STR_REPLACE
+              parameters:
+                - '2'
+                - onWhenCallinProgress
+            -
+              type: STR_REPLACE
+              parameters:
+                - '3'
+                - alwaysOff
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: d17aede0056c4db6b659c08ded72b735
+          name: 'Microphone Mute switch'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.2.5.0
+          key: system.hw.mic_mute_switch
+          delay: 1h
+          history: 180d
+          description: 'Microphone mute switch enable'
+          preprocessing:
+            -
+              type: STR_REPLACE
+              parameters:
+                - '2'
+                - '0'
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 8e4dbe472d9a4e87b89fa248cf4d4a3d
+          name: 'Model Name'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.1.7.0
+          key: system.hw.model
+          delay: 1h
+          history: 180d
+          trends: '0'
+          value_type: TEXT
+          inventory_link: MODEL
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: aade0ecb9be54f0697e9150f6342e0d5
+          name: 'Output Amplifier autolevel overrided'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.3.6.0
+          key: system.hw.output.amp.autolevel
+          delay: 1h
+          history: 180d
+          trends: '0'
+          value_type: TEXT
+          description: |
+            Override the Auto Setup amplifier output level 
+            
+            1 - true,
+            2 - false
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+            -
+              type: STR_REPLACE
+              parameters:
+                - '1'
+                - 'true'
+            -
+              type: STR_REPLACE
+              parameters:
+                - '2'
+                - 'false'
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 378aea57b4d64280bbe6eb562e353781
+          name: 'Output Amplifier Level'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.3.7.0
+          key: system.hw.output.amp.level
+          delay: 1h
+          history: 180d
+          value_type: FLOAT
+          units: dB
+          description: 'Amplifier output level (dB)'
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: bcfceb0f589248a8a7ab0ac028b4f3b7
+          name: 'Output Line Level'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.3.5.0
+          key: system.hw.output.level
+          delay: 1h
+          history: 180d
+          value_type: FLOAT
+          units: dB
+          description: 'Line output level (dB)'
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 71ad247ae309415a9f2089d8556c7ff5
+          name: 'Output line autolevel overrided'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.3.4.0
+          key: system.hw.output.line.autolevel
+          delay: 1h
+          history: 180d
+          trends: '0'
+          value_type: TEXT
+          description: |
+            Override the Auto Setup line output level 
+            
+            1 - true,
+            2 - false
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+            -
+              type: STR_REPLACE
+              parameters:
+                - '1'
+                - 'true'
+            -
+              type: STR_REPLACE
+              parameters:
+                - '2'
+                - 'false'
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: f017a513914448259d349173c669f7c0
+          name: 'Serial Number'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.1.8.0
+          key: system.hw.serialnumber
+          delay: 1h
+          history: 180d
+          trends: '0'
+          value_type: TEXT
+          inventory_link: SERIALNO_A
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: e9a9e3d3732a4bbebe446d8b0947bf99
+          name: 'USB connection'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.1.6.0
+          key: system.hw.usb
+          delay: 1h
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+          description: |
+            An enumeration to identify the Upstream USB port connection type.
+            
+            Either : disconnected(0), usb2(1) or usb3(2)
+          preprocessing:
+            -
+              type: STR_REPLACE
+              parameters:
+                - '0'
+                - disconnected
+            -
+              type: STR_REPLACE
+              parameters:
+                - '1'
+                - usb
+            -
+              type: STR_REPLACE
+              parameters:
+                - '2'
+                - usb2
+            -
+              type: STR_REPLACE
+              parameters:
+                - '3'
+                - usb3
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 94d174de4ab045b68a739363d6c62f8f
+          name: 'Device Location'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.1.4.0
+          key: system.location
+          delay: 1h
+          history: 180d
+          trends: '0'
+          value_type: TEXT
+          inventory_link: LOCATION
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: 30b35b552f824a158fb1cd3b1501457d
+          name: 'Device Name'
+          type: SNMP_AGENT
+          snmp_oid: enterprises.44457.1.1.1.0
+          key: system.name
+          delay: 1h
+          history: 180d
+          trends: '0'
+          value_type: TEXT
+          inventory_link: NAME
+          preprocessing:
+            -
+              type: DISCARD_UNCHANGED
+              parameters:
+                - ''
+          tags:
+            -
+              tag: Application
+              value: Inventory
+  graphs:
+    -
+      uuid: e5506d5e03ba47a1b89a54144bb726fd
+      name: Calls
+      graph_items:
+        -
+          sortorder: '1'
+          color: 1A7C11
+          item:
+            host: Devio
+            key: system.hw.call.inprogress
